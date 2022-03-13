@@ -1,0 +1,12 @@
+
+{
+    "name": "employee-tracker",
+    "version": "1.0.0",
+    "private": "true",
+    "description": "An command-line application to track employees and employee information",
+    "main": "app.js",
+    "author": "Ilan Timerman",
+    "dependencies": {
+        
+    }
+}
