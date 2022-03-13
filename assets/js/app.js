@@ -9,7 +9,7 @@ function vaidateDChoice(){
     }
 }
 
-function addDRE{
+function drePrompts(){
 
     inquirer.prompt([
         {
