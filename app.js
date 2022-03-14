@@ -126,4 +126,54 @@ function addEmployee() {
         connection.query("SELECT FROM ");
       });
   }
+
+  function addRole() {
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          message: "What is the role you want to add?",
+          name: "aRRole",
+        },
+        {
+          type: "input",
+          message: "What is the salary for the role?",
+          name: "aRSalary",
+        },
+        {
+          type: "input",
+          message: "What is the department id number?",
+          name: "aRId",
+        },
+      ])
+      .then(function (answer) {
+        connection.query(
+          "INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)",
+          [answer.aRRole, answer.aRSalary, answer.aRId],
+          function (err, res) {
+            if (err) throw err;
+            console.table(res);
+          }
+        );
+      });
+  }
+  
+  function addDepartment() {
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          message: "What is the name of the department?",
+          name: "departmentName",
+        },
+      ])
+      .then((answer) => {
+        connection.query("INSERT INTO department (name) VALUES (?)");
+      });
+  }
+  
+  function quit() {
+    connection.end();
+    process.exit();
+  }
   
