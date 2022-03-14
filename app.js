@@ -97,3 +97,33 @@ function updateEmployee(){
 
     })
 }
+
+function addEmployee() {
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          message: "What is the employees first name?",
+          name: "aeFirstName",
+        },
+        {
+          type: "input",
+          message: "What is the employees last name?",
+          name: "aeLastName",
+        },
+        {
+          type: "input",
+          message: "What is the employee's id number?",
+          name: "aeId",
+        },
+        {
+          type: "input",
+          message: "What is the employee's manager id number?",
+          name: "aeManagerId",
+        },
+      ])
+      .then(function (answer) {
+        connection.query("SELECT FROM ");
+      });
+  }
+  
