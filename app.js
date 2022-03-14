@@ -3,25 +3,23 @@ const inquirer = require("inquirer");
 const cTable = require("console.table");
 const mysql = require("mysql");
 const { table } = require("console");
-
 var con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "rootroot",
-    database: "employeeTracker",
-  });
-  
-  con.connect(function (err) {
-    if (err) throw err;
-    console.log("Connected!");
-  });
-
+  host: "localhost",
+  user: "root",
+  password: "rootroot",
+  database: "employeeTracker",
+});
+con.connect(function (err) {
+  if (err) throw err;
+  console.log("Connected!");
+  startScreen();
+});
 function startScreen() {
   inquirer
     .prompt([
       {
         type: "list",
-        message: "Would you like to do?",
+        message: "What would you like to do?",
         name: "choice",
         choices: [
           "View All Employees?",
@@ -64,7 +62,6 @@ function startScreen() {
       }
     });
 }
-
 function viewAllEmployees() {
   connection.query("SELECT * FROM employee", (err, res) => {
     if (err) throw err;
@@ -72,7 +69,6 @@ function viewAllEmployees() {
     startScreen();
   });
 }
-
 function viewAllEmployeesByRoles() {
   connection.query("SELECT * FROM role", (err, res) => {
     if (err) throw err;
@@ -80,7 +76,6 @@ function viewAllEmployeesByRoles() {
     startScreen();
   });
 }
-
 function viewAllEmployeesByDepartments() {
   connection.query("SELECT * FROM department", (err, res) => {
     if (err) throw err;
@@ -88,7 +83,6 @@ function viewAllEmployeesByDepartments() {
     startScreen();
   });
 }
-
 function updateEmployee() {
   inquirer
     .prompt([
@@ -114,7 +108,6 @@ function updateEmployee() {
       );
     });
 }
-
 function addEmployee() {
   inquirer
     .prompt([
@@ -156,7 +149,6 @@ function addEmployee() {
       );
     });
 }
-
 function addRole() {
   inquirer
     .prompt([
@@ -187,7 +179,6 @@ function addRole() {
       );
     });
 }
-
 function addDepartment() {
   inquirer
     .prompt([
@@ -209,7 +200,6 @@ function addDepartment() {
       );
     });
 }
-
 function quit() {
   connection.end();
   process.exit();
