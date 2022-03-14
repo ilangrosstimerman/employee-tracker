@@ -3,6 +3,19 @@ const inquirer = require("inquirer");
 const cTable = require("console.table");
 const mysql = require("mysql");
 const { table } = require("console");
+
+var con = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "rootroot",
+    database: "employeeTracker",
+  });
+  
+  con.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected!");
+  });
+
 function startScreen() {
   inquirer
     .prompt([
