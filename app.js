@@ -1,3 +1,5 @@
+const fs = require('fs');
+const inquirer = require('inquirer');
 const cTable = require('console.table');
 
 const mysql = require('mysql');
@@ -79,3 +81,19 @@ function viewAllEmployeesByDepartments(){
         startScreen();
     })
 };
+
+
+function updateEmployee(){
+    inquirer.prompt([{
+        type:'input', 
+        message: 'Which employee would you like to update?',
+        name: 'employeeUpdate'
+    },{
+        type:'input',
+        message: 'What do you want to update their role to?',
+        name: 'updateERole'
+    }
+    ]).then(function(comment){
+
+    })
+}
