@@ -18,6 +18,8 @@ function initialLoad() {
   );
 }
 
+initialLoad()
+
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -52,10 +54,10 @@ function startScreen() {
       case "View All Employees":
         viewAllEmployees();
         break;
-      case "View All Employees by Roles":
+      case "View All Employees By Roles":
         viewAllEmployeesByRoles();
         break;
-      case "View All Employees by Departments":
+      case "View All Employees By Departments":
         viewAllEmployeesByDepartments();
         break;
       case "Update Employee":
@@ -221,15 +223,21 @@ function addDepartment() {
 function deleteEmployee() {
   inquirer.prompt([{
     type: "input",
-    message: "Which employee do you want to delete?",
-    name: "deleteEmployee"
-  }, ]).then((answer) => {
-    connection.query("DELETE FROM employee WHERE first_name=?;", [answer.deleteEmployee], (err, res) => {
-      if (err) throw err;
-      console.table(res);
-
-    })
-  });
+    message: "What is the FIRST NAME of the employee do you want to delete?",
+    name: "deleteEmployeeFN"
+  },
+  {
+    type: "input",
+    message: "What is the LAST NAME of the employee do you want to delete?",
+    name: "deleteEmployeeLN"
+  },
+]).then((answer) => {
+  connection.query("DELETE FROM employee WHERE first_name=? AND last_name=?;", [answer.deleteEmployeeFN, answer.deleteEmployeeLN], (err, res) => {
+    if (err) throw err;
+    console.table(res);
+    startScreen();
+  })
+});
 };
 
 function deleteDepartment() {
@@ -254,11 +262,21 @@ function deleteRole() {
     connection.query("DELETE FROM role WHERE first_name= ?;", [answer.deleteRole], (err, res) => {
       if (err) throw err;
       console.table(res);
+      startScreen();
     })
   })
 };
 
 function quit() {
+  clear();
+
+  console.log(
+    chalk.yellow(
+      figlet.textSync('Goodbye', {
+        horizontalLayout: 'full'
+      })
+    )
+  );
   connection.end();
   process.exit();
 };
