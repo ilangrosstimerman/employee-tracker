@@ -21,7 +21,7 @@ function initialLoad() {
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "",
+  password: "password",
   database: "employeeTracker",
 });
 connection.connect(function (err) {
