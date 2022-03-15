@@ -3,36 +3,34 @@ const inquirer = require("inquirer");
 const cTable = require("console.table");
 const mysql = require("mysql2");
 const { table } = require("console");
-var con = mysql.createConnection({
+const con = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "",
-  database: "",
+  database: "employeeTracker",
 });
 con.connect(function (err) {
   if (err) throw err;
-  console.log("Connected!");
+  console.log("Connected as id: " + con.threadId);
   startScreen();
 });
 function startScreen() {
   inquirer
-    .prompt([
-      {
-        type: "list",
-        message: "What would you like to do?",
-        name: "choice",
-        choices: [
-          "View All Employees?",
-          "View All Employee's By Roles?",
-          "View all Employees By Departments",
-          "Update Employee",
-          "Add Employee?",
-          "Add Role?",
-          "Add Department?",
-          "Quit",
-        ],
-      },
-    ])
+  .prompt([{
+    type: "list",
+    message: "What would you like to do?",
+    name: "choice",
+    choices: [
+      "View All Employees?",
+      "View All Employees By Roles?",
+      "View all Employees By Departments",
+      "Update Employee",
+      "Add Employee?",
+      "Add Role?",
+      "Add Department?",
+      "Quit",
+    ],
+  }, ])
     .then((result) => {
       switch (result.choice) {
         case "View All Employees":
@@ -113,12 +111,12 @@ function addEmployee() {
     .prompt([
       {
         type: "input",
-        message: "What is the employees first name?",
+        message: "What is the employee's first name?",
         name: "aeFirstName",
       },
       {
         type: "input",
-        message: "What is the employees last name?",
+        message: "What is the employee's last name?",
         name: "aeLastName",
       },
       {
@@ -181,13 +179,11 @@ function addRole() {
 }
 function addDepartment() {
   inquirer
-    .prompt([
-      {
-        type: "input",
-        message: "What is the name of the department?",
-        name: "departmentName",
-      },
-    ])
+    .prompt([{
+    type: "input",
+    message: "What is the name of the department?",
+    name: "departmentName",
+  }, ])
     .then((answer) => {
       connection.query(
         "INSERT INTO department (name) VALUES (?)",
