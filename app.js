@@ -5,21 +5,10 @@ const mysql = require("mysql");
 const chalk = require("chalk")
 const clear = require('clear');
 const figlet = require('figlet');
-
 function initialLoad() {
   clear();
-
-  console.log(
-    chalk.yellow(
-      figlet.textSync('Employee Tracker', {
-        horizontalLayout: 'full'
-      })
-    )
-  );
 }
-
 initialLoad()
-
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -45,7 +34,9 @@ function startScreen() {
       "Remove Employee",
       "Add Role",
       "Remove Role",
+      "View All Departments",
       "Add Department",
+      "Remove Department",
       "Remove Role",
       "Quit",
     ]
@@ -57,7 +48,7 @@ function startScreen() {
       case "View All Employees By Roles":
         viewAllEmployeesByRoles();
         break;
-      case "View All Employees By Departments":
+      case "View all Employees By Departments":
         viewAllEmployeesByDepartments();
         break;
       case "Update Employee":
@@ -78,16 +69,26 @@ function startScreen() {
       case "Add Department":
         addDepartment();
         break;
+
+      case "View All Departments":
+        viewAllDepartments();
+        break;
+
       case "Remove Department":
         deleteDepartment();
         break;
+
+      case "Back to Start":
+        startScreen();
+        break;
+
       case "Quit":
         quit();
         break;
     }
   });
 }
-
+//function calls
 function viewAllEmployees() {
   connection.query("SELECT * FROM employee;", (err, res) => {
     if (err) throw err;
@@ -95,7 +96,6 @@ function viewAllEmployees() {
     startScreen();
   });
 }
-
 function viewAllEmployeesByRoles() {
   connection.query("SELECT * FROM role;", (err, res) => {
     if (err) throw err;
@@ -103,7 +103,6 @@ function viewAllEmployeesByRoles() {
     startScreen();
   });
 }
-
 function viewAllEmployeesByDepartments() {
   connection.query("SELECT * FROM department;", (err, res) => {
     if (err) throw err;
@@ -111,7 +110,6 @@ function viewAllEmployeesByDepartments() {
     startScreen();
   });
 }
-
 function updateEmployee() {
   inquirer.prompt([{
       type: "input",
@@ -120,7 +118,7 @@ function updateEmployee() {
     },
     {
       type: "input",
-      message: "What do you want to update their role to?",
+      message: "Please add a new Role ID",
       name: "updateERole",
     },
   ]).then((answer) => {
@@ -130,11 +128,11 @@ function updateEmployee() {
       (err, res) => {
         if (err) throw err;
         console.table(res);
+        startScreen();
       }
     )
   });
 }
-
 function addEmployee() {
   inquirer.prompt([{
       type: "input",
@@ -173,7 +171,6 @@ function addEmployee() {
     );
   });
 }
-
 function addRole() {
   inquirer.prompt([{
       type: "input",
@@ -197,11 +194,11 @@ function addRole() {
       (err, res) => {
         if (err) throw err;
         console.table(res);
+        startScreen();
       }
     )
   });
 };
-
 function addDepartment() {
   inquirer.prompt([{
     type: "input",
@@ -219,39 +216,48 @@ function addDepartment() {
     );
   });
 };
-
 function deleteEmployee() {
   inquirer.prompt([{
-    type: "input",
-    message: "What is the FIRST NAME of the employee do you want to delete?",
-    name: "deleteEmployeeFN"
-  },
-  {
-    type: "input",
-    message: "What is the LAST NAME of the employee do you want to delete?",
-    name: "deleteEmployeeLN"
-  },
-]).then((answer) => {
-  connection.query("DELETE FROM employee WHERE first_name=? AND last_name=?;", [answer.deleteEmployeeFN, answer.deleteEmployeeLN], (err, res) => {
-    if (err) throw err;
-    console.table(res);
-    startScreen();
-  })
-});
+      type: "input",
+      message: "What is the FIRST NAME of the employee do you want to delete?",
+      name: "deleteEmployeeFN"
+    },
+    {
+      type: "input",
+      message: "What is the LAST NAME of the employee do you want to delete?",
+      name: "deleteEmployeeLN"
+    },
+  ]).then((answer) => {
+    connection.query("DELETE FROM employee WHERE first_name=? AND last_name=?;", [answer.deleteEmployeeFN, answer.deleteEmployeeLN], (err, res) => {
+      if (err) throw err;
+      console.table(res);
+      startScreen();
+    })
+  });
 };
-
 function deleteDepartment() {
   inquirer.prompt([{
     type: "input",
     message: "Which department do you want to delete?",
     name: "deleteDepartment"
   }, ]).then((answer) => {
-    connection.query("DELETE FROM department where department_id=?;", [answer.deleteDepartment], (err, res) => {
+    console.log("You have successfully deleted " + answer.deleteDepartment);
+
+    connection.query("DELETE FROM department where name=?;", [answer.deleteDepartment], (err, res) => {
       if (err) throw err;
       console.table(res);
+      startScreen();
     })
   })
 };
+
+function viewAllDepartments() {
+  connection.query("SELECT * FROM department", (err, res) => {
+    if (err) throw err;
+    console.table(res);
+    startScreen();
+  })
+}
 
 function deleteRole() {
   inquirer.prompt([{
@@ -267,16 +273,9 @@ function deleteRole() {
   })
 };
 
+// quit
 function quit() {
   clear();
-
-  console.log(
-    chalk.yellow(
-      figlet.textSync('Goodbye', {
-        horizontalLayout: 'full'
-      })
-    )
-  );
   connection.end();
   process.exit();
 };
